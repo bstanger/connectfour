@@ -7,6 +7,7 @@ body {
 header {
   height: 50px;
   background-color: #4c4555;
+  padding: 0 16px;
 }
 
 .header__logo {
@@ -25,7 +26,7 @@ header {
 }
 
 .board {
-  width: 45vw;
+  width: 53vw;
   height: 45vw;
   background-color: #22758e;
   display: flex;
@@ -70,7 +71,7 @@ header {
   top: 20vh;
   width: 70vw;
   height: 150px;
-  background-color: #e3e8e6;
+  background-color: #fff;
   color: #4c4555;
   text-align: center;
   font-size: 50px;

@@ -7,16 +7,17 @@ export class Board extends React.Component {
     super(props);
     this.state = {
       columns: [
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0]
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0],
+        [0,0,0,0,0,0]
       ],
       activePlayer: "Y",
-      winner: ""
+      winner: "",
+      spacesPlayed: 0
     }
   }
 
@@ -40,11 +41,12 @@ export class Board extends React.Component {
       };
     }
     allCols[idx] = clickedCol;
+    let playCount = ++this.state.spacesPlayed;
     this.setState(
-      { columns: allCols },
+      { columns: allCols,
+        spacesPlayed: playCount},
       () => this.checkForWinsOrTies(idx, rowHtIdx) // as callback bc setState is async
     )
-    console.log('Columns updated! ');
   }
 
   toggleActivePlayer(){
@@ -65,10 +67,18 @@ export class Board extends React.Component {
         let upDiagonalToCheck = this.createUpwardsDiagonalToCheck(colIdx, rowHtIdx);
         let downDiagonalToCheck = this.createDownwardsDiagonalToCheck(colIdx, rowHtIdx);
         if(!this.checkForFourRepeats(upDiagonalToCheck)){
-          this.checkForFourRepeats(downDiagonalToCheck);
+          if(!this.checkForFourRepeats(downDiagonalToCheck)){
+            this.checkForTie();
+          }
         }
       }
     };
+  }
+
+  checkForTie(){
+    if(this.state.spacesPlayed === 42){
+      this.recordWinner('tie');
+    }
   }
 
   checkForFourRepeats(rowOrCol){
@@ -139,7 +149,8 @@ export class Board extends React.Component {
 
   render(){
     let announcementClass = (this.state.winner === "") ? "announcement" : "announcement is-shown";
-    let winnerName = (this.state.winner === "R") ? "Red" : "Yellow";
+    let winnerName = (this.state.winner === "R") ? "Red wins!" : "Yellow wins!";
+    winnerName = (this.state.winner === "tie") ? "Tie!" : winnerName;
     if(this.state.winner === "R"){
       announcementClass += " is-red";
     } else if (this.state.winner === "Y"){
@@ -152,7 +163,7 @@ export class Board extends React.Component {
             <Column column={column} onClick={this.onColumnClick.bind(this)} key={index} idx={index} />
           )}
         </div>
-        <div className={announcementClass}>{winnerName} wins!</div>
+        <div className={announcementClass}>{winnerName}</div>
       </div>
     );
   }
