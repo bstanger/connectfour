@@ -19,9 +19,9 @@ export class Column extends React.Component {
   }
   render(props){
     return (
-      <div className="board__col" onClick={() => this.props.onClick(event, this.props.idx)}>
+      <div className="board__col" onClick={() => this.props.onClick(this.props.idx)}>
         {this.props.column.map( (space, index) =>
-            <Space space={space} key={index}/>
+            <Space space={space} key={index} />
         )}
       </div>
     );

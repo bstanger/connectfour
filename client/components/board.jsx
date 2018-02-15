@@ -7,7 +7,7 @@ export class Board extends React.Component {
     super(props);
     this.state = {
       columns: [
-        ["R",0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -15,18 +15,19 @@ export class Board extends React.Component {
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
       ],
-      activePlayer: "Y"
+      activePlayer: "Y",
+      winner: ""
     }
   }
 
   /// On Click /////////////////////////
 
-  onColumnClick(event, idx){
-    this.toggleLowestSpace(event, idx);
+  onColumnClick(idx){
+    this.toggleLowestSpace(idx);
     this.toggleActivePlayer();
   }
 
-  toggleLowestSpace(event, idx){
+  toggleLowestSpace(idx){
     let allCols = this.state.columns.slice();
     let clickedCol = allCols[idx].slice();
     for (var i = 0; i < clickedCol.length; i++){
@@ -37,9 +38,11 @@ export class Board extends React.Component {
       };
     }
     allCols[idx] = clickedCol;
-    this.setState({
-      columns: allCols
-    })
+    this.setState(
+      { columns: allCols },
+      () => this.checkForWinsOrTies(idx) // as callback bc setState is async
+    )
+    console.log('Columns updated! ', this.state.columns);
   }
 
   toggleActivePlayer(){
@@ -50,12 +53,50 @@ export class Board extends React.Component {
     }
   }
 
+  // Check for Win ////////////////////////
+
+  checkForWinsOrTies(idx){
+    this.checkColumnsForWin(idx);
+  }
+
+  checkColumnsForWin(idx){
+    let currentCol = this.state.columns[idx];
+    let firstColor = currentCol[0];
+    let streakCount = 1;
+    for (var i = 1; i < currentCol.length; i++){
+      if(currentCol[i] === 0){
+        break;
+      }
+      if (currentCol[i] === firstColor){
+        streakCount++;
+        if (streakCount > 3){
+          this.recordWinner(firstColor);
+          break;
+        }
+      } else {
+        firstColor = currentCol[i];
+        streakCount = 1;
+      }
+    };
+  }
+
+  recordWinner(winner){
+    this.setState({winner: winner});
+  }
+
+
+  // Render //////////////////////////////
+
   render(){
+    let announcementClass = (this.state.winner === "") ? "announcement" : "announcement is-shown";
     return (
-      <div className="board">
-        {this.state.columns.map( (column, index) =>
-          <Column column={column} onClick={this.onColumnClick.bind(this)} key={index} idx={index}/>
-        )}
+      <div className= "board-wrap">
+        <div className="board">
+          {this.state.columns.map( (column, index) =>
+            <Column column={column} onClick={this.onColumnClick.bind(this)} key={index} idx={index} />
+          )}
+        </div>
+        <div className={announcementClass}>{this.state.winner} wins!</div>
       </div>
     );
   }
