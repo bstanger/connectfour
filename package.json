@@ -1,0 +1,38 @@
+{
+  "name": "connectfour",
+  "version": "1.0.0",
+  "description": "Connect Four game built in Express and React",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "webpack": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bstanger/connectfour.git"
+  },
+  "author": "Becca Stanger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bstanger/connectfour/issues"
+  },
+  "homepage": "https://github.com/bstanger/connectfour#readme",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "webpack": "^3.11.0"
+  }
+}
