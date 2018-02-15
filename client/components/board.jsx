@@ -61,7 +61,13 @@ export class Board extends React.Component {
     let columnToCheck = this.state.columns[colIdx];
     let rowToCheck = this.createRowToCheck(rowHtIdx);
     if(!this.checkForFourRepeats(columnToCheck)){
-      this.checkForFourRepeats(rowToCheck);
+      if(!this.checkForFourRepeats(rowToCheck)){
+        let upDiagonalToCheck = this.createUpwardsDiagonalToCheck(colIdx, rowHtIdx);
+        let downDiagonalToCheck = this.createDownwardsDiagonalToCheck(colIdx, rowHtIdx);
+        if(!this.checkForFourRepeats(upDiagonalToCheck)){
+          this.checkForFourRepeats(downDiagonalToCheck);
+        }
+      }
     };
   }
 
@@ -86,25 +92,43 @@ export class Board extends React.Component {
     return false;
   }
 
-  // convertColumnsDataToRows(){
-  //   let columnArr = this.state.columns;
-  //   let newRowsData = [];
-  //   for(var row = 0; row < columnArr.length; row++){
-  //     let newRow = [];
-  //     for (var col = columnArr[row].length - 1; col >= 0; col--){
-  //       newRow.push(columnArr[col][row]);
-  //     }
-  //     newRowsData.push(newRow);
-  //   }
-  //   return newRowsData;
-  // }
+  createUpwardsDiagonalToCheck(colIdx, rowHtIdx){
+    let diagonalArr = [];
+    let currentRowHt = rowHtIdx - colIdx;
+    let currentCol = 0;
+    let highestRow = this.state.columns[0].length - 1;
+    while(currentCol < this.state.columns.length){
+      if(currentRowHt >= 0){
+        diagonalArr.push(this.state.columns[currentCol][currentRowHt]);
+      }
+      ++currentCol;
+      ++currentRowHt;
+    }
+    return diagonalArr;
+  }
+
+  createDownwardsDiagonalToCheck(colIdx, rowHtIdx){
+    let diagonalArr = [];
+    let currentRowHt = rowHtIdx + colIdx;
+    let currentCol = 0;
+    let highestRow = this.state.columns[0].length - 1;
+    console.log('starting point ', currentCol, currentRowHt);
+    while(currentCol < this.state.columns.length){
+      if(currentRowHt <= highestRow && currentRowHt >= 0){
+        diagonalArr.push(this.state.columns[currentCol][currentRowHt]);
+      }
+      ++currentCol;
+      --currentRowHt;
+      console.log('next point ', currentCol, currentRowHt);
+    }
+    return diagonalArr;
+  }
 
   createRowToCheck(rowHtIdx){
     let currentRow = [];
     for (var col = 0; col < this.state.columns.length; col++){
       currentRow.push(this.state.columns[col][rowHtIdx]);
     }
-    console.log(currentRow);
     return currentRow;
   }
 
