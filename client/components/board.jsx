@@ -7,10 +7,10 @@ export class Board extends React.Component {
     super(props);
     this.state = {
       columns: [
-        ["R",0,0,0,0,0,0],
-        ["R",0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
-        ["Y",0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
@@ -112,14 +112,12 @@ export class Board extends React.Component {
     let currentRowHt = rowHtIdx + colIdx;
     let currentCol = 0;
     let highestRow = this.state.columns[0].length - 1;
-    console.log('starting point ', currentCol, currentRowHt);
     while(currentCol < this.state.columns.length){
       if(currentRowHt <= highestRow && currentRowHt >= 0){
         diagonalArr.push(this.state.columns[currentCol][currentRowHt]);
       }
       ++currentCol;
       --currentRowHt;
-      console.log('next point ', currentCol, currentRowHt);
     }
     return diagonalArr;
   }
@@ -141,6 +139,12 @@ export class Board extends React.Component {
 
   render(){
     let announcementClass = (this.state.winner === "") ? "announcement" : "announcement is-shown";
+    let winnerName = (this.state.winner === "R") ? "Red" : "Yellow";
+    if(this.state.winner === "R"){
+      announcementClass += " is-red";
+    } else if (this.state.winner === "Y"){
+      announcementClass += " is-yellow";
+    }
     return (
       <div className= "board-wrap">
         <div className="board">
@@ -148,7 +152,7 @@ export class Board extends React.Component {
             <Column column={column} onClick={this.onColumnClick.bind(this)} key={index} idx={index} />
           )}
         </div>
-        <div className={announcementClass}>{this.state.winner} wins!</div>
+        <div className={announcementClass}>{winnerName} wins!</div>
       </div>
     );
   }
